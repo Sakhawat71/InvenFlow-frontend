@@ -8,6 +8,7 @@ import {
     ShoppingCart,
     Truck,
     Users,
+    UserRound,
     LogOut,
     CreditCard,
     BarChart3,
@@ -21,80 +22,86 @@ const nav: Array<{
     icon: LucideIcon;
     roles: User['role'][];
 }> = [
-        {
-            href: '/dashboard',
-            label: 'Dashboard',
-            icon: LayoutDashboard,
-            roles: [
-                'ADMIN',
-                'INVENTORY_MANAGER',
-                'DEPARTMENT_STAFF',
-                'APPROVER',
-                'PROCUREMENT_OFFICER',
-                'FINANCE_OFFICER',
-            ],
-        },
-        {
-            href: '/inventory',
-            label: 'Inventory',
-            icon: PackageSearch,
-            roles: ['ADMIN', 'INVENTORY_MANAGER'],
-        },
-        {
-            href: '/purchase-request',
-            label: 'Purchase Requests',
-            icon: ClipboardList,
-            roles: ['ADMIN', 'DEPARTMENT_STAFF', 'APPROVER', 'PROCUREMENT_OFFICER'],
-        },
-        {
-            href: '/approval',
-            label: 'Approvals',
-            icon: ClipboardList,
-            roles: ['ADMIN', 'APPROVER'],
-        },
-        {
-            href: '/suppliers',
-            label: 'Suppliers',
-            icon: Users,
-            roles: ['ADMIN', 'PROCUREMENT_OFFICER'],
-        },
-        {
-            href: '/quotations',
-            label: 'Quotations',
-            icon: ReceiptText,
-            roles: ['ADMIN', 'PROCUREMENT_OFFICER'],
-        },
-        {
-            href: '/purchase-orders',
-            label: 'Purchase Orders',
-            icon: ShoppingCart,
-            roles: ['ADMIN', 'PROCUREMENT_OFFICER'],
-        },
-        {
-            href: '/goods-receipt',
-            label: 'Goods Receipt',
-            icon: Truck,
-            roles: ['ADMIN', 'INVENTORY_MANAGER', 'PROCUREMENT_OFFICER'],
-        },
-        {
-            href: '/invoices',
-            label: 'Invoices',
-            icon: ReceiptText,
-            roles: ['ADMIN', 'FINANCE_OFFICER'],
-        },
-        {
-            href: '/payments',
-            label: 'Payments',
-            icon: CreditCard,
-            roles: ['ADMIN', 'FINANCE_OFFICER'],
-        },
-        {
-            href: '/reports',
-            label: 'Reports',
-            icon: BarChart3,
-            roles: ['ADMIN', 'FINANCE_OFFICER'],
-        },
-    ];
+    {
+        href: '/dashboard',
+        label: 'Dashboard',
+        icon: LayoutDashboard,
+        roles: [
+            'ADMIN',
+            'INVENTORY_MANAGER',
+            'DEPARTMENT_STAFF',
+            'APPROVER',
+            'PROCUREMENT_OFFICER',
+            'FINANCE_OFFICER',
+        ],
+    },
+    {
+        href: '/inventory',
+        label: 'Inventory',
+        icon: PackageSearch,
+        roles: ['ADMIN', 'INVENTORY_MANAGER'],
+    },
+    {
+        href: '/users',
+        label: 'Users',
+        icon: UserRound,
+        roles: ['ADMIN'],
+    },
+    {
+        href: '/purchase-request',
+        label: 'Purchase Requests',
+        icon: ClipboardList,
+        roles: ['ADMIN', 'DEPARTMENT_STAFF', 'APPROVER', 'PROCUREMENT_OFFICER'],
+    },
+    {
+        href: '/approval',
+        label: 'Approvals',
+        icon: ClipboardList,
+        roles: ['ADMIN', 'APPROVER'],
+    },
+    {
+        href: '/suppliers',
+        label: 'Suppliers',
+        icon: Users,
+        roles: ['ADMIN', 'PROCUREMENT_OFFICER'],
+    },
+    {
+        href: '/quotations',
+        label: 'Quotations',
+        icon: ReceiptText,
+        roles: ['ADMIN', 'PROCUREMENT_OFFICER'],
+    },
+    {
+        href: '/purchase-orders',
+        label: 'Purchase Orders',
+        icon: ShoppingCart,
+        roles: ['ADMIN', 'PROCUREMENT_OFFICER'],
+    },
+    {
+        href: '/goods-receipt',
+        label: 'Goods Receipt',
+        icon: Truck,
+        roles: ['ADMIN', 'INVENTORY_MANAGER', 'PROCUREMENT_OFFICER'],
+    },
+    {
+        href: '/invoices',
+        label: 'Invoices',
+        icon: ReceiptText,
+        roles: ['ADMIN', 'FINANCE_OFFICER'],
+    },
+    {
+        href: '/payments',
+        label: 'Payments',
+        icon: CreditCard,
+        roles: ['ADMIN', 'FINANCE_OFFICER'],
+    },
+    {
+        href: '/reports',
+        label: 'Reports',
+        icon: BarChart3,
+        roles: ['ADMIN', 'FINANCE_OFFICER'],
+    },
+];
 export function AppLayout({ user, children }: { user: User; children: React.ReactNode }) {
     return (
         <div className="min-h-screen bg-slate-50 lg:flex">
