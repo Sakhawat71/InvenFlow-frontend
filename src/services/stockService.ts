@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers';
 import type { FieldValues } from 'react-hook-form';
-
+import { apiFetch } from '@/lib/api';
 type ApiResult<T = unknown> = { success: boolean; message?: string; data?: T };
 const BASE_API = process.env.NEXT_PUBLIC_BASE_API;
 
@@ -13,6 +13,18 @@ const getHeaders = async () => {
         ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
     };
 };
+
+export async function createStockTransaction(data: {
+    itemId: string;
+    type: 'IN' | 'OUT';
+    quantity: number;
+}) {
+    return apiFetch('/stock', {
+        method: 'POST',
+
+        body: JSON.stringify(data),
+    });
+}
 
 export const getStockTransactions = async (): Promise<ApiResult> => {
     try {
@@ -44,7 +56,7 @@ export const getStockTransactionById = async (id: string): Promise<ApiResult> =>
     }
 };
 
-export const createStockTransaction = async (stockData: FieldValues): Promise<ApiResult> => {
+export const createStockTransactions = async (stockData: FieldValues): Promise<ApiResult> => {
     try {
         const response = await fetch(`${BASE_API}/stock`, {
             method: 'POST',

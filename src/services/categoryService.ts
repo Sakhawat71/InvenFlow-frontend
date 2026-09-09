@@ -2,6 +2,7 @@
 
 import { cookies } from 'next/headers';
 import type { FieldValues } from 'react-hook-form';
+import { apiFetch } from '@/lib/api';
 
 type ApiResult<T = unknown> = { success: boolean; message?: string; data?: T };
 const BASE_API = process.env.NEXT_PUBLIC_BASE_API;
@@ -14,7 +15,39 @@ const getHeaders = async () => {
     };
 };
 
-export const getCategories = async (): Promise<ApiResult> => {
+export interface Category {
+    id: string;
+
+    name: string;
+}
+
+export interface Category {
+    id: string;
+
+    name: string;
+
+    createdAt: string;
+}
+
+export async function getCategories() {
+    return apiFetch<Category[]>('/categories');
+}
+
+export async function createCategory(data: { name: string }) {
+    return apiFetch('/categories', {
+        method: 'POST',
+
+        body: JSON.stringify(data),
+    });
+}
+
+export async function deleteCategory(id: string) {
+    return apiFetch(`/categories/${id}`, {
+        method: 'DELETE',
+    });
+}
+
+export const getCategorie = async (): Promise<ApiResult> => {
     try {
         const response = await fetch(`${BASE_API}/category`, {
             headers: await getHeaders(),
@@ -44,7 +77,7 @@ export const getCategoryById = async (id: string): Promise<ApiResult> => {
     }
 };
 
-export const createCategory = async (categoryData: FieldValues): Promise<ApiResult> => {
+export const createCategorys = async (categoryData: FieldValues): Promise<ApiResult> => {
     try {
         const response = await fetch(`${BASE_API}/category`, {
             method: 'POST',
@@ -76,7 +109,7 @@ export const updateCategory = async (id: string, categoryData: FieldValues): Pro
     }
 };
 
-export const deleteCategory = async (id: string): Promise<ApiResult> => {
+export const deleteCategorys = async (id: string): Promise<ApiResult> => {
     try {
         const response = await fetch(`${BASE_API}/category/${id}`, {
             method: 'DELETE',

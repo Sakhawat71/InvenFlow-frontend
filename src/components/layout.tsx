@@ -12,6 +12,8 @@ import {
     LogOut,
     CreditCard,
     BarChart3,
+    FolderTree,
+    Building2,
     type LucideIcon,
 } from 'lucide-react';
 import type { User } from '@/features/auth/types';
@@ -34,6 +36,18 @@ const nav: Array<{
             'PROCUREMENT_OFFICER',
             'FINANCE_OFFICER',
         ],
+    },
+    {
+        href: '/departments',
+        label: 'Departments',
+        icon: Building2,
+        roles: ['ADMIN'],
+    },
+    {
+        href: '/categories',
+        label: 'Categories',
+        icon: FolderTree,
+        roles: ['ADMIN'],
     },
     {
         href: '/inventory',

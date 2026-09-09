@@ -2,9 +2,30 @@
 
 import { cookies } from 'next/headers';
 import type { FieldValues } from 'react-hook-form';
-
+import { apiFetch } from '@/lib/api';
 type ApiResult<T = unknown> = { success: boolean; message?: string; data?: T };
 const BASE_API = process.env.NEXT_PUBLIC_BASE_API;
+
+export interface InventoryItem {
+    id: string;
+
+    name: string;
+
+    sku: string;
+
+    description?: string;
+
+    quantity: number;
+
+    minimumStock: number;
+
+    unit: string;
+
+    category: {
+        id: string;
+        name: string;
+    };
+}
 
 const getHeaders = async () => {
     const accessToken = (await cookies()).get('accessToken')?.value;
@@ -13,6 +34,33 @@ const getHeaders = async () => {
         ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
     };
 };
+
+export async function getInventory() {
+    return apiFetch<InventoryItem[]>('/inventory');
+}
+
+export async function createInventory(data: {
+    name: string;
+    sku: string;
+    description?: string;
+    categoryId: string;
+    quantity: number;
+    minimumStock: number;
+}) {
+    return apiFetch('/inventory', {
+        method: 'POST',
+
+        body: JSON.stringify(data),
+    });
+}
+
+export async function updateInventory(id: string, data: Partial<InventoryItem>) {
+    return apiFetch(`/inventory/${id}`, {
+        method: 'PATCH',
+
+        body: JSON.stringify(data),
+    });
+}
 
 export const getInventoryItems = async (): Promise<ApiResult> => {
     try {
