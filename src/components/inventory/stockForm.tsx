@@ -70,17 +70,7 @@ export default function StockForm({ itemId }: { itemId: string }) {
                 <option value="STOCK_OUT">Stock OUT</option>
             </select>
 
-            <input
-                name="quantity"
-
-                type="number"
-
-                placeholder="Quantity"
-
-                className="input"
-
-                required
-            />
+            <input name="quantity" type="number" min="1" placeholder="Quantity" required />
 
             <button disabled={loading} className="btn">
                 {loading ? 'Updating...' : 'Update Stock'}

@@ -25,6 +25,22 @@ export class ApiError extends Error {
     }
 }
 
+async function handleResponse<T>(res: Response): Promise<T> {
+    const json = await res.json().catch(() => null);
+
+    if (!res.ok || !json?.success) {
+        throw new ApiError(
+            json?.message ?? 'Request failed',
+
+            res.status,
+
+            json?.errors ?? json,
+        );
+    }
+
+    return json.data;
+}
+
 export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise<T> {
     const token = (await cookies()).get('invenflow_token')?.value;
 
@@ -36,51 +52,61 @@ export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise
         headers.set('Authorization', `Bearer ${token}`);
     }
 
-    const res = await fetch(`${base}${path}`, {
-        ...init,
-        headers,
-        cache: 'no-store',
-    });
+    let response: Response;
 
-    const json = await res.json().catch(() => null);
+    try {
+        response = await fetch(
+            `${base}${path}`,
 
-    if (!res.ok || !json?.success) {
-        console.error('API ERROR:', {
-            url: path,
-            status: res.status,
-            response: json,
-        });
+            {
+                ...init,
 
-        throw new ApiError(json?.message ?? 'Request failed', res.status, json?.errors ?? json);
+                headers,
+
+                cache: 'no-store',
+            },
+        );
+    } catch (error) {
+        throw new ApiError(
+            'Server is unavailable. Please try again.',
+
+            503,
+
+            error,
+        );
     }
 
-    return json.data ?? null;
+    return handleResponse<T>(response);
 }
 
 export async function publicApiFetch<T>(path: string, init: RequestInit = {}): Promise<T> {
-    const res = await fetch(`${base}${path}`, {
-        ...init,
+    const headers = new Headers(init.headers);
 
-        headers: {
-            'Content-Type': 'application/json',
+    headers.set('Content-Type', 'application/json');
 
-            ...init.headers,
-        },
+    let response: Response;
 
-        cache: 'no-store',
-    });
+    try {
+        response = await fetch(
+            `${base}${path}`,
 
-    const json = await res.json().catch(() => null);
+            {
+                ...init,
 
-    if (!res.ok || !json?.success) {
-        console.error('PUBLIC API ERROR:', {
-            url: path,
-            status: res.status,
-            response: json,
-        });
+                headers,
 
-        throw new ApiError(json?.message ?? 'Request failed', res.status, json?.errors ?? json);
+                cache: 'no-store',
+            },
+        );
+    } catch (error) {
+        throw new ApiError(
+            'Server is unavailable. Please try again.',
+
+            503,
+
+            error,
+        );
     }
 
-    return json.data ?? null;
+    return handleResponse<T>(response);
 }
